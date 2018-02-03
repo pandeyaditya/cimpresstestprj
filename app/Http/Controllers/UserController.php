@@ -8,10 +8,17 @@ use DB;
 
 class UserController extends Controller
 {
-    
+    /*
+		Default method to load login page
+	*/
 	public function index(){
 		return view('login');
 	}
+	
+	
+	/*
+		Function to check the login user
+	*/
 	
 	public function checkuser(Request $request){
 		$username = $request->input('username');
@@ -43,7 +50,7 @@ class UserController extends Controller
 	
 	}
 	
-	// To load the user dashboard
+	/* To load the user dashboard */
 	public function dashboard(){
 		
 		//Check if the user session is created, if yes load dashboard else redirect to login
@@ -62,12 +69,13 @@ class UserController extends Controller
 		return redirect('user/');		
 	}
 	
+	/*	To logout the user */
 	public function logout(Request $request){
 		$request->session()->forget('username');
 		return redirect('user/');			
 	}
 	
-	//To load the admin dashboard
+	/* To load the admin dashboard */
 	public function loadadmin(){
 		if(!empty(session('username'))){
 			
@@ -81,7 +89,7 @@ class UserController extends Controller
 		
 	}
 	
-	//To load the user posts
+	/* To load the user posts */
 	public function loadposts(){
 		if(!empty(session('username'))){
 			
@@ -95,12 +103,12 @@ class UserController extends Controller
 		
 	}
 	
-	//To add new Posts
+	/* To load the add new post form */
 	public function addnewpost(){
 		return view('addnewpost');
 	}
 	
-	//Insert a new post
+	/* Insert a new post in the system */
 	public function insertpost(Request $request){
 		
 		$title = $request->input('posttitle');
@@ -127,8 +135,7 @@ class UserController extends Controller
 		return redirect('user/dashboard')->with('status', 'Post Added Successfully !');
 	}
 	
-	//Function to edit a post by user
-	
+	/* Function to edit a post by user */
 	public function editpost($postid){
 		$posts = DB::table('posts')
 					->where('post_id','=',$postid)
@@ -137,6 +144,7 @@ class UserController extends Controller
 		return view('editpost')->with('postdata',$posts);
 	}
 	
+	/* Method to update the post	*/
 	public function updatepost(Request $request){
 		$title  = $request->input('posttitle');
 		$body   = $request->input('content');	
@@ -156,8 +164,7 @@ class UserController extends Controller
 		
 	}
 	
-	//Post edit, update by admin
-	
+	/*	Edit form for the Admin	*/
 	public function editpostadmin($postid){
 		$posts = DB::table('posts')
 					->where('post_id','=',$postid)
@@ -166,6 +173,7 @@ class UserController extends Controller
 		return view('editpostadmin')->with('postdata',$posts);
 	}
 	
+	/* Function to update the post by admin	*/
 	public function updatepostadmin(Request $request){
 		$title  = $request->input('posttitle');
 		$body   = $request->input('content');	
@@ -185,12 +193,13 @@ class UserController extends Controller
 		
 	}
 	
+	/*	Function to delete post */
 	public function deletepost($postid){		
 		DB::table('posts')->where('post_id', '=', $postid)->delete();
 		return redirect('user/adminposts')->with('adminupdatestatus', 'Post Deleted Successfully !');
 	}
 	
-	
+	/* Function to view post */
 	public function viewpost($postid){
 		$posts = DB::table('posts')
 					->where('post_id','=',$postid)
@@ -199,7 +208,7 @@ class UserController extends Controller
 		return view('viewpost')->with('postdata',$posts);
 	}
 	
-	
+	/* Function to view post from admin */
 	public function viewpostadmin($postid){
 		$posts = DB::table('posts')
 					->where('post_id','=',$postid)
