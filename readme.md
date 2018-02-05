@@ -57,4 +57,4 @@ Steps to run the project
 6) Also generate the encryption key by running the command 
 
 php artisan key:generate
-Note : 
+ 
