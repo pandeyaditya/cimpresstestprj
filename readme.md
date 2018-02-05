@@ -49,6 +49,12 @@ Steps to run the project
 1) Git clone the project
 2) Create a database in your localhost and update the credentials in the .env file
 3) Import the sql("cimpressblog.sql") file present in the project
-3) Run the project by going to the project directory by running the below commandphp
+4) Run the command "composer update" in the project directory
+5) Run the project by going to the project directory by running the below commandphp
  
  php artisan serve
+
+6) Also generate the encryption key by running the command 
+
+php artisan key:generate
+Note : 
