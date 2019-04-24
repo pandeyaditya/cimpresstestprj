@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
+use App\Address;
 
 class UserController extends Controller
 {
@@ -13,8 +14,7 @@ class UserController extends Controller
 	*/
 	public function index(){
 		return view('login');
-	}
-	
+	}	
 	
 	/*
 		Function to check the login user
@@ -23,7 +23,6 @@ class UserController extends Controller
 	public function checkuser(Request $request){
 		$username = $request->input('username');
 		$password = $request->input('password');
-
 	
 		$request->validate([
 			'username'=>'required',
@@ -40,7 +39,7 @@ class UserController extends Controller
 		if(count($result)>0){			
 			session(['username'   => $username]);
 			if($result[0]->usertype == 2){
-				return redirect('user/adminposts');
+				return redirect('user/adminaddress');
 			}			
 			return redirect('user/dashboard');
 		}
@@ -88,6 +87,21 @@ class UserController extends Controller
 		return redirect('user/');
 		
 	}
+
+
+	/*To load admin address */
+	public function loadaddress(){
+		if(!empty(session('username'))){
+			
+			//Load the blog posts
+			$addresses = \App\Address::all();
+			
+			//return view('admindash')->with('userdata',$users);
+			return view('adminaddress')->with('addressdata',$addresses);
+		}
+		return redirect('user/');
+		
+	}
 	
 	/* To load the user posts */
 	public function loadposts(){
@@ -102,94 +116,99 @@ class UserController extends Controller
 		return redirect('user/');
 		
 	}
+
+
+		/* To load the user profile */
+		public function loadprofile(){
+			if(!empty(session('username'))){
+				
+				//Load the blog posts
+				$posts = DB::table('posts')
+						->get();
+				
+				return view('adminprofile')->with('postdata',$posts);
+			}
+			return redirect('user/');
+			
+		}
 	
-	/* To load the add new post form */
-	public function addnewpost(){
-		return view('addnewpost');
+	/*To load add address form */
+	public function addaddress(){
+		return view('addnewaddress');
 	}
 	
-	/* Insert a new post in the system */
-	public function insertpost(Request $request){
+	/* Insert a new address in the system */
+	public function insertaddress(Request $request){
+
+		$address      = new Address();
 		
-		$title = $request->input('posttitle');
-		$body  = $request->input('content');
+		$address->address_title = $request->input('addresstitle');
+		$address->contact_name  = $request->input('contactname');
+		$address->contact_number  = $request->input('contactnum');
+		$address->address_1   = $request->input('addressone');
+		$address->address_2   = $request->input('addresstwo');
+		$address->address_3 = $request->input('addressthree');
+		$address->pincode  		 = $request->input('pincode');
+		$address->city  			 = $request->input('city');
+		$address->state  			 = $request->input('state');
+		$address->country  		 = $request->input('country');
 		
 		$request->validate([
-			'posttitle'=>'required',
-			'content'=>'required'
+			'addresstitle'=>'required',
+			'contactname'=>'required',
+			'contactnum'=>'required',
+			'addressone'=>'required',
+			'addresstwo'=>'required',
+			'addressthree'=>'required',
+			'pincode'=>'required',
+			'city'=>'required',
+			'state'=>'required',
+			'country'=>'required'
 		]);
 		
-		// Fetch the current user id from the session username
+		$address->save();
 		
-		$id =  DB::table('users')->where('username',session('username'))->value('id');
-		
-		DB::table('posts')->insert(
-			[
-				'user_id'=>$id,
-				'postdata'=>$body,
-				'posttitle'=>$title,
-				'created_at'=>now()				
-			]
-		);
-		
-		return redirect('user/dashboard')->with('status', 'Post Added Successfully !');
+		return redirect('/user/adminaddress')->with('status', 'Address Added Successfully !');
 	}
-	
-	/* Function to edit a post by user */
-	public function editpost($postid){
-		$posts = DB::table('posts')
-					->where('post_id','=',$postid)
-					->get();
+
+
+	public function editaddress($addressid){
+		$address = \App\Address::find($addressid);
 		
-		return view('editpost')->with('postdata',$posts);
+		return view('editaddress')->with('addressdata',$address);
 	}
 	
 	/* Method to update the post	*/
-	public function updatepost(Request $request){
-		$title  = $request->input('posttitle');
-		$body   = $request->input('content');	
-		$postid = $request->input('postid');
+	public function updateaddress(Request $request){
+		$address      = new Address();
+	
+		$address->address_title = $request->input('addresstitle');
+		$address->contact_name  = $request->input('contactname');
+		$address->contact_number  = $request->input('contactnum');
+		$address->address_1   = $request->input('addressone');
+		$address->address_2   = $request->input('addresstwo');
+		$address->address_3 = $request->input('addressthree');
+		$address->pincode  		 = $request->input('pincode');
+		$address->city  			 = $request->input('city');
+		$address->state  			 = $request->input('state');
+		$address->country  		 = $request->input('country');
 		
 		$request->validate([
-			'posttitle'=>'required',
-			'content'=>'required'
+			'addresstitle'=>'required',
+			'contactname'=>'required',
+			'contactnum'=>'required',
+			'addressone'=>'required',
+			'addresstwo'=>'required',
+			'addressthree'=>'required',
+			'pincode'=>'required',
+			'city'=>'required',
+			'state'=>'required',
+			'country'=>'required'
 		]);
 		
-		DB::table('posts')
-            ->where('post_id', $postid)
-            ->update(['posttitle' => $title,'postdata'=>$body]);
-			
+		$address->save();
 		
-		return redirect('user/dashboard')->with('status', 'Post Updated Successfully !');
-		
-	}
-	
-	/*	Edit form for the Admin	*/
-	public function editpostadmin($postid){
-		$posts = DB::table('posts')
-					->where('post_id','=',$postid)
-					->get();
-		
-		return view('editpostadmin')->with('postdata',$posts);
-	}
-	
-	/* Function to update the post by admin	*/
-	public function updatepostadmin(Request $request){
-		$title  = $request->input('posttitle');
-		$body   = $request->input('content');	
-		$postid = $request->input('postid');
-		
-		$request->validate([
-			'posttitle'=>'required',
-			'content'=>'required'
-		]);
-		
-		DB::table('posts')
-            ->where('post_id', $postid)
-            ->update(['posttitle' => $title,'postdata'=>$body]);
-			
-		
-		return redirect('user/adminposts')->with('adminupdatestatus', 'Post Updated Successfully !');
+		return redirect('/user/adminaddress')->with('status', 'Address Updated Successfully !');
 		
 	}
 	

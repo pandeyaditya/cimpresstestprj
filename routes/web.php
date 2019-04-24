@@ -23,7 +23,17 @@ Route::get('/user/logout','UserController@logout');
 
 Route::post('/user/checklogin','UserController@checkuser');
 
+/* Route for Address Application */
+
 Route::get('/user/admindash','UserController@loadadmin');
+Route::get('/user/adminaddress','UserController@loadaddress');
+Route::get('/user/adminprofile','UserController@loadprofile');
+Route::get('/user/addaddress','UserController@addaddress');
+Route::post('/user/insertaddress','UserController@insertaddress');
+
+Route::get('/user/editaddress/{id}','UserController@editaddress');
+Route::post('/user/updateaddress','UserController@updateaddress');
+/* Route for Address Application ends */
 
 Route::get('/user/adminposts','UserController@loadposts');
 

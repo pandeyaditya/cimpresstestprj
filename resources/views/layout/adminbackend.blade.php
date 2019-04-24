@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Cimpress blog</title>
+    <title>Address Book</title>
 
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -35,18 +35,17 @@
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 		<div class="navbar-header">
-		  <a class="navbar-brand" href="#">Cimpress Blog</a>
+		  <a class="navbar-brand" href="#">Address Book</a>
 		</div>
 		<ul class="nav navbar-nav">
-		  <li class="active"><a href="#">Home</a></li>
-		  <li><a href="admindash">Users</a></li>
-		  <li><a href="adminposts">Posts</a></li>
-		  <li><a href="#">Profile</a></li>
+		  <!-- <li class="active"><a href="#">Home</a></li> -->
+		  <li><a href="adminaddress">Manage Address</a></li>
+			<li><a href="adminprofile">Manage Profile</a></li>
 		</ul>
 		
 		<div style="float:right;margin-top:5px;">
 			<a href="#">Welcome {{ session('username') }}</a>
-			<a href="/user/logout">Logout</a>
+			<a href="/user/logout" class="btn btn-danger">Logout</a>
 		</div>
 	  </div>
 	</nav>

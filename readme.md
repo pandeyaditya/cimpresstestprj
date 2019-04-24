@@ -1,13 +1,10 @@
-Cimpress Blog Project
+Address Book Project
 ======================
 
 Requirements : 
 
 PHP 5.6 or above
 Mysql 5.6 or above
-
-
-
 
 User Credentials : 
 

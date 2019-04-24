@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Cimpress blog Login</title>
+    <title>Address Book Login</title>
 
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -38,7 +38,7 @@
 			</div>
 		@endif
 	    <form class="form-signin" name="frmlogin" action="/user/checklogin" method="post">
-        <h2 class="form-signin-heading">Cimpress Blog App</h2>
+        <h2 class="form-signin-heading">Address Blog App</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username"  autofocus>
 		<div class="error">{{ $errors->first('username') }}</div>
