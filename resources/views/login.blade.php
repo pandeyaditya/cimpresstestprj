@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Address Book Login</title>
+    <title>Webuy Admin Login</title>
 
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -38,10 +38,10 @@
 			</div>
 		@endif
 	    <form class="form-signin" name="frmlogin" action="/user/checklogin" method="post">
-        <h2 class="form-signin-heading">Address Blog App</h2>
+        <center><h2 class="form-signin-heading">Webuy Admin App</h2></center>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username"  autofocus>
-		<div class="error">{{ $errors->first('username') }}</div>
+        <input type="text" id="email" name="email" class="form-control" placeholder="Enter email"  autofocus>
+		<div class="error">{{ $errors->first('email') }}</div>
 		<br/>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" >
@@ -51,13 +51,17 @@
 		<br/>
 		 {{ csrf_field() }}
         <input type="submit" name="submit" id="submit" class="btn btn-lg btn-primary btn-block" value="Sign in">
+        <br/>
+        <center>
+          Not Registered ?
+          <a href="/user/signup" class="btn btn-lg btn-success">Sign Up</a>
+        </center>
       </form>
 
     </div>
 	<div class="col-md-3"></div>	
     </div>
     </div>
-
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>

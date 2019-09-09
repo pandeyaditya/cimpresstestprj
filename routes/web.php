@@ -17,11 +17,38 @@ Route::get('/user','UserController@index');
 
 Route::get('/user/test','UserController@test');
 
+Route::get('/user/signup','UserController@signup');
+
+Route::post('/user/checksignup','UserController@checksignup');
+
+// Route::get('/user/productspage', 'UserController@products');
+
 Route::get('/user/dashboard','UserController@dashboard');
 
-Route::get('/user/logout','UserController@logout');
+Route::get('/logout','UserController@logout');
 
 Route::post('/user/checklogin','UserController@checkuser');
+
+Route::get('/checksession','UserController@checksession');
+
+/* Routes for products */
+Route::get('/allproducts','UserController@allproducts');
+Route::get('/getproducts','ProductController@getproducts');
+Route::get('/product/addtocart/{id}','ProductController@addtocart');
+Route::get('/flushcart','ProductController@flushcart');
+
+Route::get('/cart','ProductController@getcart');
+Route::get('/checkout','ProductController@checkout');
+Route::post('/confirmorder','ProductController@confirmorder');
+/*
+    Routes for Admin
+*/
+
+Route::get('/user/addcategory','UserController@addcategory');
+
+Route::get('/user/addproduct','UserController@addproduct');
+
+Route::post('/user/savecategory','UserController@savecategory');
 
 /* Route for Address Application */
 

@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
-use App\Address;
+use App\Users;
+use App\Category;
+use App\Product;
+
+
 
 class UserController extends Controller
 {
@@ -17,38 +21,120 @@ class UserController extends Controller
 	}	
 	
 	/*
+		To load signup page
+	*/
+	public function signup(){
+		return view('signup');
+	}
+
+	/*
+		To load signup page
+	*/
+	public function checksignup(Request $request){
+
+		$users     = new Users();
+		// print_r($users);die;
+		$users->name = $request->input('name');
+		$users->address = $request->input('address');
+		$users->email = $request->input('email');
+		$users->mobileno = $request->input('mobileno');
+		$users->password = $request->input('password');
+
+		// $request->validate([
+		// 	'name'=> 'required',
+		// 	'address'=> 'required',
+		// 	'email'=> 'required',
+		// 	'mobile'=> 'required',
+		// 	'password'=> 'required',
+		// ]);
+
+		// echo 'before';
+		$users->save();
+		// echo 'after';die;
+
+		return redirect('/user/signup')->with('status', 'User Added Successfully !');
+	}
+
+	/*
 		Function to check the login user
 	*/
 	
 	public function checkuser(Request $request){
-		$username = $request->input('username');
-		$password = $request->input('password');
-	
-		$request->validate([
-			'username'=>'required',
-			'password'=>'required'
-		]);
-		
-		//After validation 
-		$result = DB::table('users')
-				->select('id','username','password','usertype')
-				->where('username', '=', $username)
-				->where('password', '=', md5($password))
-				->get();
-				
-		if(count($result)>0){			
-			session(['username'   => $username]);
-			if($result[0]->usertype == 2){
-				return redirect('user/adminaddress');
-			}			
-			return redirect('user/dashboard');
+
+		if($request->session()->has('email')){
+			$products = Product::all();
+			return redirect('/getproducts')->with('products',$products);
 		}
 		else{
-			return redirect('user/')->with('invalid_login', 'Invalid Credentials !');
+			
+			$email = $request->input('email');
+			$password = $request->input('password');
+		
+			$request->validate([
+				'email'=>'required',
+				'password'=>'required'
+			]);
+			
+			// if($request->session()->has('email')){
+				//After validation 
+				$result = DB::table('users')
+						->select('id','email','password')
+						->where('email', '=', $email)
+						->where('password', '=', $password)
+						->get();
+						
+				if(count($result)>0){			
+					// session(['email' => $email]);
+					$request->session()->put('email',$email);
+					$products = Product::all();
+					return redirect('/getproducts')->with('products',$products);
+					// return view('products')->with('products',$products);
+				}
+				else{
+					return redirect('user/')->with('invalid_login', 'Invalid Credentials !');
+				}
 		}
-	
 	}
-	
+
+	/* To check session */
+	public function checksession(Request $request){
+		if($request->session()->has('email')){
+			$products = Product::all();
+			return redirect('/getproducts')->with('products',$products);
+		}
+		else{
+			return view('login');
+		}
+	}
+
+
+	/*
+		To load category addition page
+	*/
+	public function addcategory(){
+		return view('addcategory');
+	}
+
+	/*
+		To load product addition page
+	*/
+	public function addproduct(){
+		return view('addproduct');
+	}
+
+
+	/**
+	 * To save category 
+	 */
+	public function savecategory(Request $request){
+		$category     = new Category();
+		// print_r($users);die;
+		$category->category = $request->input('categoryname');
+		$category->save();
+		return view('addcategory')->with('categorystatus','Category Added Successfully');
+	}
+
+
 	/* To load the user dashboard */
 	public function dashboard(){
 		
@@ -70,7 +156,7 @@ class UserController extends Controller
 	
 	/*	To logout the user */
 	public function logout(Request $request){
-		$request->session()->forget('username');
+		$request->session()->forget('email');
 		return redirect('user/');			
 	}
 	
